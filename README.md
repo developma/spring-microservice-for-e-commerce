@@ -21,3 +21,10 @@ This example application provides REST API for viewing and getting inventory ite
 If you specified invalid path (e.g. /inventory/iiiite, /inventory/items, /inventory/item/aaaa/) on browser or REST access,
 this example application will be returned JSON message which includes an error infomation.
 
+### shipping application.
+
+TODO
+
+### storefrontend application.
+
+TODO
