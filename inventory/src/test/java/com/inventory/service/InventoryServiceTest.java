@@ -1,0 +1,69 @@
+package com.inventory.service;
+
+import com.inventory.domain.Category;
+import com.inventory.domain.Item;
+import com.inventory.repository.InventoryMapper;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Arrays;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
+
+@SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
+public class InventoryServiceTest {
+
+    @InjectMocks
+    InventoryService sut;
+
+    @Mock
+    InventoryMapper inventoryMapper;
+
+    @Before
+    public void setUp() throws Exception {
+        when(inventoryMapper.selectItemById(1)).thenReturn(new Item(1, "Hoge", new Category(1, "Bar")));
+        when(inventoryMapper.selectItemById(null)).thenReturn(null);
+        when(inventoryMapper.selectItemsByCategoryId(1)).thenReturn(Arrays.asList(new Item(), new Item()));
+        when(inventoryMapper.selectItemsByCategoryId(null)).thenReturn(Arrays.asList(new Item(), new Item(), new Item(), new Item()));
+    }
+
+    @Test
+    public void testItems() throws Exception {
+        assertThat(sut.items().size(), is(4));
+    }
+
+    @Test
+    public void testItems_validValue() throws Exception {
+        assertThat(sut.items(1).size(), is(2));
+    }
+
+    @Test
+    public void testItems_invalidValue() throws Exception {
+        assertThat(sut.items(Integer.MAX_VALUE).size(), is(0));
+    }
+
+    @Test
+    public void testItem_validValue() throws Exception {
+        final Item item = sut.item(1);
+        assertThat(item.getId(), is(1));
+        assertThat(item.getName(), is("Hoge"));
+        assertThat(item.getCategory(), samePropertyValuesAs(new Category(1, "Bar")));
+
+        assertThat(sut.item(2), is(nullValue()));
+    }
+
+    @Test
+    public void testItem_invalidValue() throws Exception {
+        assertThat(sut.item(Integer.MAX_VALUE), is(nullValue()));
+    }
+}

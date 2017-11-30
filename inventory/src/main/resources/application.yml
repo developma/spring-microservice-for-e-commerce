@@ -1,0 +1,20 @@
+server:
+  port: 8200
+
+spring:
+  application:
+    name: inventory
+  output:
+    ansi:
+      enabled: ALWAYS
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8100/eureka/
+
+info:
+  name: inventory
+
+logging:
+  file: logfile/inventory.log

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.inventory.repository.InventoryMapper">
+
+    <resultMap id="item" type="com.inventory.domain.Item">
+        <result column="ID" property="id" />
+        <result column="NAME" property="name" />
+        <result column="CATEGORY_ID" property="category.id" />
+        <result column="CATEGORY_NAME" property="category.name" />
+    </resultMap>
+
+    <select id="selectItemById" resultMap="item" parameterType="int">
+        SELECT
+            ITEM.ID AS ID,
+            ITEM.NAME AS NAME,
+            CATEGORY.ID AS CATEGORY_ID,
+            CATEGORY.NAME AS CATEGORY_NAME
+        FROM
+            ITEM
+            JOIN CATEGORY
+                ON ITEM.CATEGORY_ID = CATEGORY.ID
+        <if test="id != null">
+        WHERE
+            ITEM.ID = #{id}
+        </if>
+    </select>
+
+    <select id="selectItemsByCategoryId" resultMap="item" parameterType="int">
+        SELECT
+            ITEM.ID AS ID,
+            ITEM.NAME AS NAME,
+            CATEGORY.ID AS CATEGORY_ID,
+            CATEGORY.NAME AS CATEGORY_NAME
+        FROM
+            ITEM
+            JOIN CATEGORY
+                ON ITEM.CATEGORY_ID = CATEGORY.ID
+        <if test="categoryId != null">
+            WHERE
+                ITEM.CATEGORY_ID = #{categoryId}
+        </if>
+    </select>
+
+</mapper>
