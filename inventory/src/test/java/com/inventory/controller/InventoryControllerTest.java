@@ -32,7 +32,7 @@ public class InventoryControllerTest {
     @Before
     public void setUp() throws Exception {
         when(inventoryService.item(null)).thenReturn(null);
-        when(inventoryService.item(1)).thenReturn(new Item(1, "Foo", new Category(1,"Bar")));
+        when(inventoryService.item(1)).thenReturn(new Item(1, "Foo", 10000, 10, "Desc of Foo", null, new Category(1,"Bar")));
         when(inventoryService.items()).thenReturn(Arrays.asList(new Item(), new Item(), new Item()));
         when(inventoryService.items(2)).thenReturn(Arrays.asList(new Item(), new Item()));
     }

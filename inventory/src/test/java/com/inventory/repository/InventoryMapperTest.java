@@ -38,6 +38,12 @@ public class InventoryMapperTest {
         Item item = items.get(0);
         assertThat(item.getId(), is(1));
         assertThat(item.getName(), is("Apple"));
+        // INSERT INTO ITEM (NAME, PRICE, UNIT, DESCRIPTION, PICT, CATEGORY_ID)
+//        VALUES ('Apple', 110, 5, 'Apple is fruits', FILE_READ('classpath:pict/apple.jpeg'), 1);
+        assertThat(item.getPrice(), is(110));
+        assertThat(item.getUnit(), is(5));
+        assertThat(item.getDescription(), is("Apple is fruits"));
+        // TODO: Must assert value of pict.
         assertThat(item.getCategory(), samePropertyValuesAs(new Category(1, "FOOD")));
 
         item = items.get(8);

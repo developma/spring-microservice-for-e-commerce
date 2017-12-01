@@ -1,5 +1,6 @@
 package com.inventory.handler;
 
+import com.common.domain.ErrorInformation;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,49 +27,4 @@ public class GlobalExceptionHandler {
                 .Builder("SVR_URI_001", "an invalid parameter was specified for path of URI.").build();
     }
 
-    static class ErrorInformation {
-
-        private final String errorId;
-        private final String errorMessage;
-        private final String countermeasure;
-
-        private ErrorInformation(final Builder builder) {
-            errorId = builder.errorId;
-            errorMessage = builder.errorMessage;
-            countermeasure = builder.countermeasure;
-        }
-
-        public String getErrorId() {
-            return errorId;
-        }
-
-        public String getErrorMessage() {
-            return errorMessage;
-        }
-
-        public String getCountermeasure() {
-            return countermeasure;
-        }
-
-        static class Builder {
-
-            private final String errorId;
-            private final String errorMessage;
-            private String countermeasure;
-
-            Builder(final String errorId, final String errorMessage) {
-                this.errorId = errorId;
-                this.errorMessage = errorMessage;
-            }
-
-            public Builder countermeasure(final String countermeasure) {
-                this.countermeasure = countermeasure;
-                return this;
-            }
-
-            ErrorInformation build() {
-                return new ErrorInformation(this);
-            }
-        }
-    }
 }

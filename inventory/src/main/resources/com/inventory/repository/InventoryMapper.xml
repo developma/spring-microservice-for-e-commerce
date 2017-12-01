@@ -8,6 +8,10 @@
     <resultMap id="item" type="com.inventory.domain.Item">
         <result column="ID" property="id" />
         <result column="NAME" property="name" />
+        <result column="PRICE" property="price" />
+        <result column="UNIT" property="unit" />
+        <result column="DESCRIPTION" property="description" />
+        <result column="PICT" property="pict" />
         <result column="CATEGORY_ID" property="category.id" />
         <result column="CATEGORY_NAME" property="category.name" />
     </resultMap>
@@ -16,6 +20,10 @@
         SELECT
             ITEM.ID AS ID,
             ITEM.NAME AS NAME,
+            ITEM.PRICE AS PRICE,
+            ITEM.UNIT AS UNIT,
+            ITEM.DESCRIPTION AS DESCRIPTION,
+            ITEM.PICT AS PICT,
             CATEGORY.ID AS CATEGORY_ID,
             CATEGORY.NAME AS CATEGORY_NAME
         FROM
@@ -32,6 +40,10 @@
         SELECT
             ITEM.ID AS ID,
             ITEM.NAME AS NAME,
+            ITEM.PRICE AS PRICE,
+            ITEM.UNIT AS UNIT,
+            ITEM.DESCRIPTION AS DESCRIPTION,
+            ITEM.PICT AS PICT,
             CATEGORY.ID AS CATEGORY_ID,
             CATEGORY.NAME AS CATEGORY_NAME
         FROM

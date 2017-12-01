@@ -31,7 +31,7 @@ public class InventoryServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        when(inventoryMapper.selectItemById(1)).thenReturn(new Item(1, "Hoge", new Category(1, "Bar")));
+        when(inventoryMapper.selectItemById(1)).thenReturn(new Item(1, "Hoge", 10000, 10, "desc", null, new Category(1, "Bar")));
         when(inventoryMapper.selectItemById(null)).thenReturn(null);
         when(inventoryMapper.selectItemsByCategoryId(1)).thenReturn(Arrays.asList(new Item(), new Item()));
         when(inventoryMapper.selectItemsByCategoryId(null)).thenReturn(Arrays.asList(new Item(), new Item(), new Item(), new Item()));
