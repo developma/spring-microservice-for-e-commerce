@@ -1,0 +1,20 @@
+server:
+  port: 8210
+
+spring:
+  application:
+    name: shipping
+  output:
+    ansi:
+      enabled: ALWAYS
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8100/eureka/
+
+info:
+  name: shipping
+
+logging:
+  file: logfile/shipping.log
