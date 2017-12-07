@@ -36,7 +36,6 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	compile('org.jolokia:jolokia-core')
 	compileOnly('org.projectlombok:lombok')
-	compile project(':common')
 }
 
 dependencyManagement {

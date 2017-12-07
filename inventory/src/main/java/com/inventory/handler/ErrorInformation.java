@@ -1,4 +1,4 @@
-package com.common.domain;
+package com.inventory.handler;
 
 import lombok.Getter;
 
