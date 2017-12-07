@@ -1,0 +1,33 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: apigw
+  output:
+    ansi:
+      enabled: ALWAYS
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8100/eureka/
+
+info:
+  name: apigw
+
+logging:
+  file: logfile/apigw.log
+
+
+zuul:
+  routes:
+    front:
+      path: /storefrontend/**
+      serviceId: storefrontend
+    inventory:
+      path: /inventory/**
+      serviceId: inventory
+    shipping:
+      path: /shipping/**
+      serviceId: shipping

@@ -1,0 +1,23 @@
+server:
+  port: 8110
+
+info:
+  name: admin
+
+spring:
+  application:
+    name: admin
+  output:
+    ansi:
+      enabled: ALWAYS
+  boot:
+    admin:
+      context-path: /admin
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8100/eureka/
+
+logging:
+  file: logfile/admin.log

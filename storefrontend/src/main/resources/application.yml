@@ -1,0 +1,20 @@
+server:
+  port: 8300
+
+spring:
+  application:
+    name: storefrontend
+  output:
+    ansi:
+      enabled: ALWAYS
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8100/eureka/
+
+info:
+  name: storefrontend
+
+logging:
+  file: logfile/storefrontend.log
