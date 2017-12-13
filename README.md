@@ -58,7 +58,17 @@ $spring-microservice-for-e-commerce> ./gradlew bootRun --parallel --max-workers=
 
 ### Spring Boot Admin
 
+#### Microservice Dashboard
 
+Please access 'http://localhost:8110'.
+
+![Microservice Dashboard](./screenshots/microservicedashboard.png)
+
+#### Spring Boot Admin
+
+Please access 'http://localhost:8110/admin/'
+
+![Spring Boot Admin](./screenshots/bootadmin.png)
 
 ### Microservices Dashboard
 
