@@ -30,7 +30,25 @@ this example application will be returned JSON message which includes an error i
 
 ### shipping application.
 
-TODO
+- /shipping/order/
+  + Order item with JSON message as follows.
+  
+```json
+{  
+   "item":[  
+      {  
+         "id":1,
+         "unit":10
+      }
+   ],
+   "senderName":"testSender",
+   "receiverName":"testReceiver",
+   "address":{  
+      "zipCode":"123-4567",
+      "location":"locloclocloc"
+   }
+}
+```
 
 ### storefrontend application
 
