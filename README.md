@@ -56,6 +56,10 @@ Run all application using Gradle command on spring-microservice-for-e-commerce d
 $spring-microservice-for-e-commerce> ./gradlew bootRun --parallel --max-workers=6
 ```
 
+When you run Gradle command, there is a point to be mindful of.  
+First, your pc must be online.  
+If your pc is offline, Netflix products won't work.
+
 ### Spring Boot Admin
 
 #### Microservice Dashboard
