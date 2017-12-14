@@ -26,7 +26,7 @@ zuul:
       path: /storefrontend/**
       serviceId: storefrontend
     inventory:
-      path: /inventory/**
+      path: /shop/**
       serviceId: inventory
     shipping:
       path: /shipping/**
