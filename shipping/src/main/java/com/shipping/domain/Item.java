@@ -14,7 +14,7 @@ public class Item {
 
     @NotNull
     @Min(1)
-    private Integer id;
+    private Long id;
 
     @NotNull
     @Min(1)

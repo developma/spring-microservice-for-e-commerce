@@ -15,6 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderInfo {
 
+    private Long id;
+
     @NotNull
     @Valid
     private List<Item> item;

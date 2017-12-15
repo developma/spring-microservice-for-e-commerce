@@ -12,6 +12,8 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class Address {
 
+    private Long id;
+
     @NotNull
     private String zipCode;
 
