@@ -31,33 +31,5 @@ public class OrderInfo {
     @Valid
     private Address address;
 
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Item {
-
-        @NotNull
-        @Min(1)
-        private Integer id;
-
-        @NotNull
-        @Min(1)
-        private Integer unit;
-    }
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Address {
-
-        @NotNull
-        private String zipCode;
-
-        @NotNull
-        @Size(min = 10, max = 50)
-        private String location;
-    }
 }
-
 
