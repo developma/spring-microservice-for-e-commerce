@@ -7,11 +7,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -32,5 +34,8 @@ public class AddressMapperTest {
         final Address address = new Address(1L, "123-4567", "testLocation", "testName");
         sut.insertAddress(address);
         assertThat(jdbcTemplate.queryForList("SELECT * FROM ADDR").size(), is(2));
+
+        final Address address1 = jdbcTemplate.queryForObject("SELECT * FROM ADDR WHERE ID = 1", new BeanPropertyRowMapper<Address>(Address.class));
+        assertThat(address1, is(samePropertyValuesAs(address)));
     }
 }
