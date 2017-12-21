@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shipping.repository.OrderedItemMapper">
+
+    <insert id="insertOrderedItem" parameterType="com.shipping.domain.OrderedItem">
+        INSERT
+            INTO ORDEREDITEM
+                (ID, ITEM_ID, ITEM_UNIT)
+                VALUES
+                (#{id}, #{itemId}, #{unit})
+    </insert>
+
+</mapper>

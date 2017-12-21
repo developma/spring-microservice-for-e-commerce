@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -15,19 +14,16 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderInfo {
 
+    @NotNull
     private Long id;
 
     @NotNull
     @Valid
-    private List<Item> item;
+    private List<OrderedItem> orderedItem;
 
     @NotNull
     @Size(min = 10, max = 20)
     private String senderName;
-
-    @NotNull
-    @Size(min = 10, max = 20)
-    private String receiverName;
 
     @NotNull
     @Valid

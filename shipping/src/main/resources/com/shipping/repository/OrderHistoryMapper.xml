@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.shipping.repository.OrderHistoryMapper">
+
+    <insert id="insertOrderHistory" parameterType="com.shipping.domain.OrderInfo">
+        INSERT INTO ORDERHIST
+                    (ID, SENDERNAME, ORDEREDITEM_ID, ADDR_ID)
+                    VALUES
+                    (#{id}, #{senderName}, #{id}, #{id})
+    </insert>
+
+</mapper>

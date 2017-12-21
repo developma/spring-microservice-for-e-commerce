@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class Address {
 
+    @NotNull
     private Long id;
 
     @NotNull
@@ -20,4 +21,8 @@ public class Address {
     @NotNull
     @Size(min = 10, max = 50)
     private String location;
+
+    @NotNull
+    @Size(min = 10, max = 20)
+    private String receiverName;
 }

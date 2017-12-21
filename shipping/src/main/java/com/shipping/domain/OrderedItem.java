@@ -10,11 +10,14 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Item {
+public class OrderedItem {
+
+    @NotNull
+    private Long id;
 
     @NotNull
     @Min(1)
-    private Long id;
+    private Integer itemId;
 
     @NotNull
     @Min(1)
