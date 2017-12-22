@@ -10,7 +10,7 @@
             INTO ORDEREDITEM
                 (ID, ITEM_ID, ITEM_UNIT)
                 VALUES
-                (#{id}, #{itemId}, #{unit})
+                (#{id}, #{itemId}, #{itemUnit})
     </insert>
 
 </mapper>

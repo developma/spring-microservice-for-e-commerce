@@ -21,5 +21,5 @@ public class OrderedItem {
 
     @NotNull
     @Min(1)
-    private Integer unit;
+    private Integer itemUnit;
 }
