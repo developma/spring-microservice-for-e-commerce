@@ -32,11 +32,11 @@ public class OrderHistoryMapperTest {
     @Test
     public void testInsert() throws Exception {
 
-        final List<String> strings = Arrays.asList(
+        final List<String> sqls = Arrays.asList(
                 "INSERT INTO ADDR (ID, ZIPCODE, LOCATION, RECEIVERNAME) VALUES (99, '123-4567', 'Tokyo-Fuchu', 'SCOTT');",
                 "INSERT INTO ORDEREDITEM (ID, ITEM_ID, ITEM_UNIT) VALUES (99, 1, 5);");
 
-        strings.forEach(s -> jdbcTemplate.execute(s));
+        sqls.forEach(s -> jdbcTemplate.execute(s));
 
         assertThat(jdbcTemplate.queryForList("SELECT * FROM ORDERHIST").size(), is(1));
         final OrderInfo orderInfo = new OrderInfo(99L, null, "TestName", null);
