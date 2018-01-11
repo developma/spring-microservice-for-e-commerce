@@ -3,10 +3,13 @@ package com.shipping.repository;
 import com.shipping.config.MyBatisConfig;
 import com.shipping.config.TestDataSource;
 import com.shipping.domain.OrderedItem;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
@@ -28,9 +31,11 @@ public class OrderedItemMapperTest {
     @Autowired
     public OrderedItemMapper sut;
 
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
-    public void testInsert() throws Exception {
+    public void testInsert_valid() throws Exception {
         assertThat(jdbcTemplate.queryForList("SELECT * FROM ORDEREDITEM").size(), is(1));
         final OrderedItem orderedItem = new OrderedItem(201712150999999L, 1, 5);
         sut.insertOrderedItem(orderedItem);
@@ -38,5 +43,14 @@ public class OrderedItemMapperTest {
 
         final OrderedItem orderedItem1 = jdbcTemplate.queryForObject("SELECT * FROM ORDEREDITEM WHERE ID = 201712150999999", new BeanPropertyRowMapper<>(OrderedItem.class));
         assertThat(orderedItem1, samePropertyValuesAs(orderedItem));
+    }
+
+    @Test
+    public void testInsert_invalid() throws Exception {
+        expectedException.expect(DuplicateKeyException.class);
+        assertThat(jdbcTemplate.queryForList("SELECT * FROM ORDEREDITEM").size(), is(1));
+        final OrderedItem orderedItem = new OrderedItem(201712150999999L, 1, 5);
+        sut.insertOrderedItem(orderedItem);
+        sut.insertOrderedItem(orderedItem);
     }
 }

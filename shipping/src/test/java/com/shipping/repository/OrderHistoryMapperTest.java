@@ -3,10 +3,13 @@ package com.shipping.repository;
 import com.shipping.config.MyBatisConfig;
 import com.shipping.config.TestDataSource;
 import com.shipping.domain.OrderInfo;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -29,9 +32,11 @@ public class OrderHistoryMapperTest {
     @Autowired
     public OrderHistoryMapper sut;
 
-    @Test
-    public void testInsert() throws Exception {
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
+    @Test
+    public void testInsert_valid() throws Exception {
         final List<String> sqls = Arrays.asList(
                 "INSERT INTO ADDR (ID, ZIPCODE, LOCATION, RECEIVERNAME) VALUES (99, '123-4567', 'Tokyo-Fuchu', 'SCOTT');",
                 "INSERT INTO ORDEREDITEM (ID, ITEM_ID, ITEM_UNIT) VALUES (99, 1, 5);");
@@ -42,6 +47,20 @@ public class OrderHistoryMapperTest {
         final OrderInfo orderInfo = new OrderInfo(99L, null, "TestName", null);
         sut.insertOrderHistory(orderInfo);
         assertThat(jdbcTemplate.queryForList("SELECT * FROM ORDERHIST").size(), is(2));
+    }
 
+    @Test
+    public void testInsert_invalid() throws Exception {
+        expectedException.expect(DuplicateKeyException.class);
+        final List<String> sqls = Arrays.asList(
+                "INSERT INTO ADDR (ID, ZIPCODE, LOCATION, RECEIVERNAME) VALUES (99, '123-4567', 'Tokyo-Fuchu', 'SCOTT');",
+                "INSERT INTO ORDEREDITEM (ID, ITEM_ID, ITEM_UNIT) VALUES (99, 1, 5);");
+
+        sqls.forEach(s -> jdbcTemplate.execute(s));
+
+        assertThat(jdbcTemplate.queryForList("SELECT * FROM ORDERHIST").size(), is(1));
+        final OrderInfo orderInfo = new OrderInfo(99L, null, "TestName", null);
+        sut.insertOrderHistory(orderInfo);
+        sut.insertOrderHistory(orderInfo);
     }
 }
