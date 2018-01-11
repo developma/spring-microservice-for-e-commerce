@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     public ErrorInformation handle(final ItemNotFoundException e) {
         return new ErrorInformation.Builder("SVR_URI_010", "could not find specified item in the inventory service.").build();
     }
