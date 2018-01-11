@@ -1,6 +1,7 @@
 package com.inventory.service;
 
 import com.inventory.domain.Item;
+import com.inventory.exception.ItemNotFoundException;
 import com.inventory.repository.InventoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,11 @@ public class InventoryService {
     }
 
     public Item item(final Integer id) {
-        return inventoryMapper.selectItemById(id);
+        final Item item = inventoryMapper.selectItemById(id);
+        if (item == null) {
+            throw new ItemNotFoundException();
+        }
+        return item;
     }
 
     public List<Item> items(final Integer categoryId) {

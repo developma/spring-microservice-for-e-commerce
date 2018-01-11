@@ -93,10 +93,10 @@ public class InventoryApplicationTests {
     public void testItem_invalidValue() throws Exception {
         this.mockMvc.perform(get("/inventory/item/9999/")
                 .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
-                .andExpect(status().isOk())
-                .andDo(result -> {
-                   assertThat(result.getResponse().getContentLength(), is(0));
-                })
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.errorId", is("SVR_URI_010")))
+                .andExpect(jsonPath("$.errorMessage", is("could not find specified item in the inventory service.")))
                 .andDo(print());
     }
 

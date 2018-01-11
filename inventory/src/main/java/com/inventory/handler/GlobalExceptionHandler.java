@@ -1,5 +1,6 @@
 package com.inventory.handler;
 
+import com.inventory.exception.ItemNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,6 +25,12 @@ public class GlobalExceptionHandler {
     public ErrorInformation handle(final MethodArgumentTypeMismatchException e) {
         return new ErrorInformation
                 .Builder("SVR_URI_001", "an invalid parameter was specified for path of URI.").build();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorInformation handle(final ItemNotFoundException e) {
+        return new ErrorInformation.Builder("SVR_URI_010", "could not find specified item in the inventory service.").build();
     }
 
 }
