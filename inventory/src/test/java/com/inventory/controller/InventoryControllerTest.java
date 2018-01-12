@@ -3,9 +3,12 @@ package com.inventory.controller;
 import com.inventory.domain.Category;
 import com.inventory.domain.Item;
 import com.inventory.domain.ReduceInfo;
+import com.inventory.exception.ItemNotFoundException;
 import com.inventory.service.InventoryService;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -32,6 +35,9 @@ public class InventoryControllerTest {
     @Mock
     InventoryService inventoryService;
 
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
     @Before
     public void setUp() throws Exception {
         when(inventoryService.reduce(new ReduceInfo(1, 2))).thenReturn("success");
@@ -39,6 +45,8 @@ public class InventoryControllerTest {
         when(inventoryService.item(1)).thenReturn(new Item(1, "Foo", 10000, 10, "Desc of Foo", null, new Category(1,"Bar")));
         when(inventoryService.items()).thenReturn(Arrays.asList(new Item(), new Item(), new Item()));
         when(inventoryService.items(2)).thenReturn(Arrays.asList(new Item(), new Item()));
+        when(inventoryService.check(1)).thenReturn(new Item(1, "Foo", 10000, 10, null, null, null));
+        when(inventoryService.check(999)).thenThrow(new ItemNotFoundException());
     }
 
     @Test
@@ -75,5 +83,21 @@ public class InventoryControllerTest {
         params.put("id", "1");
         params.put("unit", "2");
         assertThat(sut.reduce(params), is("success"));
+    }
+
+    @Test
+    public void testCheck_validValue() throws Exception {
+        final Item item = sut.check(1);
+        assertThat(item.getId(), is(1));
+        assertThat(item.getName(), is("Foo"));
+        assertThat(item.getCategory(), nullValue());
+        assertThat(item.getDescription(), nullValue());
+        assertThat(item.getPict(), nullValue());
+    }
+
+    @Test
+    public void testCheck_invalidValue() throws Exception {
+        expectedException.expect(ItemNotFoundException.class);
+        sut.check(999);
     }
 }

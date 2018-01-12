@@ -50,4 +50,19 @@ public class InventoryService {
         inventoryMapper.reduce(reduceInfo);
         return "success";
     }
+
+    public Item check(final Integer id) {
+        final Item item = inventoryMapper.selectItemById(id);
+        if (item == null) {
+            throw new ItemNotFoundException();
+        }
+        return wdightSaving(item);
+    }
+
+    private Item wdightSaving(Item item) {
+        item.setCategory(null);
+        item.setPict(null);
+        item.setDescription(null);
+        return item;
+    }
 }

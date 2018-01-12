@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -88,7 +89,6 @@ public class InventoryApplicationTests {
                 .andExpect(jsonPath("$.category.id", is(2)))
                 .andExpect(jsonPath("$.category.name", is("BOOK")))
                 .andDo(print());
-
     }
 
     /**
@@ -226,6 +226,18 @@ public class InventoryApplicationTests {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.errorId", is("SVR_REQUEST_001")))
                 .andExpect(jsonPath("$.errorMessage", is("the data of request is not valid.")))
+                .andDo(print());
+    }
+
+    @Test
+    public void testCheck_validValue() throws Exception {
+        this.mockMvc.perform(get("/inventory/check/5/")
+                .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.id", is(5)))
+                .andExpect(jsonPath("$.name", is("ES2015 In Action")))
+                .andExpect(jsonPath("$.pict", nullValue()))
                 .andDo(print());
     }
 }

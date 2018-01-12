@@ -57,6 +57,11 @@ public class InventoryController {
         return inventoryService.reduce(new ReduceInfo(id, unit));
     }
 
+    @GetMapping("/check/{id}/")
+    public Item check(@PathVariable final Integer id) {
+        return inventoryService.check(id);
+    }
+
     private boolean isNumber(String... args) {
         for (String value : args) {
             try {

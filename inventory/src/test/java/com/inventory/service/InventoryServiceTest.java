@@ -4,6 +4,7 @@ import com.inventory.domain.Category;
 import com.inventory.domain.Item;
 import com.inventory.domain.ReduceInfo;
 import com.inventory.exception.InventoryLackingException;
+import com.inventory.exception.ItemNotFoundException;
 import com.inventory.repository.InventoryMapper;
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,6 +22,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.isNull;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -61,6 +63,7 @@ public class InventoryServiceTest {
 
     @Test
     public void testItem_validValue() throws Exception {
+        expectedException.expect(ItemNotFoundException.class);
         final Item item = sut.item(1);
         assertThat(item.getId(), is(1));
         assertThat(item.getName(), is("Hoge"));
@@ -71,6 +74,7 @@ public class InventoryServiceTest {
 
     @Test
     public void testItem_invalidValue() throws Exception {
+        expectedException.expect(ItemNotFoundException.class);
         assertThat(sut.item(Integer.MAX_VALUE), is(nullValue()));
     }
 
@@ -94,5 +98,13 @@ public class InventoryServiceTest {
         final Item item = sut.item(1);
         assertThat(item.getUnit(), is(10));
         sut.reduce(new ReduceInfo(1, 10));
+    }
+
+    @Test
+    public void testCheck_validValue() throws Exception {
+        final Item item = sut.check(1);
+        assertThat(item.getId(), is(1));
+        assertThat(item.getName(), is("Hoge"));
+        assertThat(item.getCategory(), nullValue());
     }
 }
