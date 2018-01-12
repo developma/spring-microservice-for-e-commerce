@@ -1,5 +1,6 @@
 package com.inventory.handler;
 
+import com.inventory.exception.IllegalRequestBodyException;
 import com.inventory.exception.ItemNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.OK)
     public ErrorInformation handle(final ItemNotFoundException e) {
         return new ErrorInformation.Builder("SVR_URI_010", "could not find specified item in the inventory service.").build();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorInformation handle(final IllegalRequestBodyException e) {
+        return new ErrorInformation.Builder("SVR_REQUEST_001", e.getMessage()).build();
     }
 
 }

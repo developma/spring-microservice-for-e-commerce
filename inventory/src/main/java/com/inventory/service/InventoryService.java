@@ -1,10 +1,13 @@
 package com.inventory.service;
 
 import com.inventory.domain.Item;
+import com.inventory.domain.ReduceInfo;
+import com.inventory.exception.InventoryLackingException;
 import com.inventory.exception.ItemNotFoundException;
 import com.inventory.repository.InventoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,5 +36,18 @@ public class InventoryService {
 
     public List<Item> items(final Integer categoryId) {
         return inventoryMapper.selectItemsByCategoryId(categoryId);
+    }
+
+    @Transactional
+    public String reduce(final ReduceInfo reduceInfo) {
+        final Item item = inventoryMapper.selectItemById(reduceInfo.getId());
+        final Integer originalUnit = item.getUnit();
+        final Integer calcedUnit = originalUnit - reduceInfo.getUnit();
+        if (calcedUnit < 0) {
+            throw new InventoryLackingException();
+        }
+        reduceInfo.setUnit(calcedUnit);
+        inventoryMapper.reduce(reduceInfo);
+        return "success";
     }
 }

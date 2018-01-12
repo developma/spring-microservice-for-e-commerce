@@ -56,4 +56,10 @@
         </if>
     </select>
 
+    <update id="reduce">
+        UPDATE ITEM
+            SET UNIT = #{unit}
+        WHERE ID = #{id}
+    </update>
+
 </mapper>

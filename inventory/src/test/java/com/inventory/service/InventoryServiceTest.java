@@ -2,9 +2,13 @@ package com.inventory.service;
 
 import com.inventory.domain.Category;
 import com.inventory.domain.Item;
+import com.inventory.domain.ReduceInfo;
+import com.inventory.exception.InventoryLackingException;
 import com.inventory.repository.InventoryMapper;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -28,6 +32,9 @@ public class InventoryServiceTest {
 
     @Mock
     InventoryMapper inventoryMapper;
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Before
     public void setUp() throws Exception {
@@ -65,5 +72,27 @@ public class InventoryServiceTest {
     @Test
     public void testItem_invalidValue() throws Exception {
         assertThat(sut.item(Integer.MAX_VALUE), is(nullValue()));
+    }
+
+    @Test
+    public void testReduce_validValue() throws Exception {
+        final Item item = sut.item(1);
+        assertThat(item.getUnit(), is(10));
+        sut.reduce(new ReduceInfo(1, 5));
+    }
+
+    @Test
+    public void testReduce_invalidValue() throws Exception {
+        expectedException.expect(InventoryLackingException.class);
+        final Item item = sut.item(1);
+        assertThat(item.getUnit(), is(10));
+        sut.reduce(new ReduceInfo(1, 30));
+    }
+
+    @Test
+    public void testReduce_invalidBoundaryValue() throws Exception {
+        final Item item = sut.item(1);
+        assertThat(item.getUnit(), is(10));
+        sut.reduce(new ReduceInfo(1, 10));
     }
 }

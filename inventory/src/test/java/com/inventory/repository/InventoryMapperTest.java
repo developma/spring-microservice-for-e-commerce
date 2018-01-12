@@ -4,6 +4,7 @@ import com.inventory.config.MyBatisConfig;
 import com.inventory.config.TestDataSource;
 import com.inventory.domain.Category;
 import com.inventory.domain.Item;
+import com.inventory.domain.ReduceInfo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,5 +88,15 @@ public class InventoryMapperTest {
     public void testSelectItemById_invalidValue() throws Exception {
         final Item item = sut.selectItemById(Integer.MAX_VALUE);
         assertThat(item, is(nullValue()));
+    }
+
+    @Test
+    public void testUpdate_validValue() throws Exception {
+        Item item = sut.selectItemById(1);
+        assertThat(item.getUnit(), is(5));
+        final boolean result = sut.reduce(new ReduceInfo(1, 3));
+        item = sut.selectItemById(1);
+        assertThat(item.getUnit(), is(3));
+        assertThat(result, is(true));
     }
 }

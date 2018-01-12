@@ -2,6 +2,7 @@ package com.inventory.controller;
 
 import com.inventory.domain.Category;
 import com.inventory.domain.Item;
+import com.inventory.domain.ReduceInfo;
 import com.inventory.service.InventoryService;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +13,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -31,6 +34,7 @@ public class InventoryControllerTest {
 
     @Before
     public void setUp() throws Exception {
+        when(inventoryService.reduce(new ReduceInfo(1, 2))).thenReturn("success");
         when(inventoryService.item(null)).thenReturn(null);
         when(inventoryService.item(1)).thenReturn(new Item(1, "Foo", 10000, 10, "Desc of Foo", null, new Category(1,"Bar")));
         when(inventoryService.items()).thenReturn(Arrays.asList(new Item(), new Item(), new Item()));
@@ -65,4 +69,11 @@ public class InventoryControllerTest {
         assertThat(sut.item(9), is(nullValue()));
     }
 
+    @Test
+    public void testReduce_validValue() throws Exception {
+        final Map<String, String> params = new HashMap<>();
+        params.put("id", "1");
+        params.put("unit", "2");
+        assertThat(sut.reduce(params), is("success"));
+    }
 }

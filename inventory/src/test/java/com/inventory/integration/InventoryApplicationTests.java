@@ -1,5 +1,6 @@
 package com.inventory.integration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inventory.InventoryApplication;
 import com.inventory.config.MyBatisConfig;
 import com.inventory.config.TestDataSource;
@@ -17,10 +18,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -69,6 +74,7 @@ public class InventoryApplicationTests {
 
     /**
      * This is a test case for path of /inventory/item/{id}/.
+     *
      * @throws Exception
      */
     @Test
@@ -87,6 +93,7 @@ public class InventoryApplicationTests {
 
     /**
      * This is a test case for path of /inventory/item/9999/.
+     *
      * @throws Exception
      */
     @Test
@@ -141,6 +148,7 @@ public class InventoryApplicationTests {
 
     /**
      * This is a test case for path of /inventory/item/aaa/.
+     *
      * @throws Exception
      */
     @Test
@@ -171,4 +179,53 @@ public class InventoryApplicationTests {
 //                .andExpect(jsonPath("$.errorMessage", is("an invalid path was specified for path of URI.")))
 //                .andDo(print());
 //    }
+
+
+    @Test
+    public void testReduce_validValue() throws Exception {
+        final Map<String, String> testParam = new HashMap<>();
+        testParam.put("id", "1");
+        testParam.put("unit", "5");
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final String json = objectMapper.writeValueAsString(testParam);
+        this.mockMvc.perform(post("/inventory/reduce/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(content().string("success"))
+                .andDo(print());
+    }
+
+    @Test
+    public void testReduce_invalidValue_wrongvalue() throws Exception {
+        final Map<String, String> testParam = new HashMap<>();
+        testParam.put("id", "aaaa");
+        testParam.put("unit", "5");
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final String json = objectMapper.writeValueAsString(testParam);
+        this.mockMvc.perform(post("/inventory/reduce/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.errorId", is("SVR_REQUEST_001")))
+                .andExpect(jsonPath("$.errorMessage", is("the data of request is not valid.")))
+                .andDo(print());
+    }
+
+    @Test
+    public void testReduce_invalidValue_null() throws Exception {
+        final Map<String, String> testParam = new HashMap<>();
+        testParam.put("unit", "5");
+        final ObjectMapper objectMapper = new ObjectMapper();
+        final String json = objectMapper.writeValueAsString(testParam);
+        this.mockMvc.perform(post("/inventory/reduce/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.errorId", is("SVR_REQUEST_001")))
+                .andExpect(jsonPath("$.errorMessage", is("the data of request is not valid.")))
+                .andDo(print());
+    }
 }
