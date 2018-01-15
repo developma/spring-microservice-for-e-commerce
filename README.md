@@ -18,12 +18,18 @@ This example application provides REST API for viewing and getting inventory ite
 
 ### inventory application
 
-- /inventory/items/
+- GET /inventory/items/
   + Gets all items.
-- /inventory/items/category/{categoryId}
+- GET /inventory/items/category/{id}
   + Gets items which belong to specify category.
-- /inventory/items/{id}
+- GET /inventory/items/{id}
   + Gets specify item.
+- POST /inventory/update/
+  + When user orders some item, this bulk API is called from shipping service.
+  + NOTE: This API needs request body of list  which includes Item id, Item unit and Item versionNo.
+- GET /inventory/check/{ids}
+  + This is internal bulk API that returns Item information, which only includes Item id, Item unit and Item versionNo.
+  + e.g: /inventory/check/1,2,3/
 
 If you specified invalid path (e.g. /inventory/iiiite, /inventory/items, /inventory/item/aaaa/) on browser or REST access,
 this example application will be returned JSON message which includes an error infomation.
