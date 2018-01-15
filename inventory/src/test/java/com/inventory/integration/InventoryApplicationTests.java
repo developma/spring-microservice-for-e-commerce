@@ -197,9 +197,9 @@ public class InventoryApplicationTests {
                 .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.id", is(5)))
-                .andExpect(jsonPath("$.name", is("ES2015 In Action")))
-                .andExpect(jsonPath("$.pict", nullValue()))
+                .andExpect(jsonPath("$[0].id", is(5)))
+                .andExpect(jsonPath("$[0].name", is("ES2015 In Action")))
+                .andExpect(jsonPath("$[0].pict", nullValue()))
                 .andDo(print());
     }
 }

@@ -1,11 +1,13 @@
 package com.inventory.controller;
 
 import com.inventory.domain.Item;
+import com.inventory.exception.IllegalRequestBodyException;
 import com.inventory.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin // To allow accessing from other domain.
@@ -41,9 +43,26 @@ public class InventoryController {
         return inventoryService.reduce(items);
     }
 
-    @GetMapping("/check/{id}/")
-    public Item check(@PathVariable final Integer id) {
-        return inventoryService.check(id);
+    @GetMapping("/check/{ids}/")
+    public List<Item> check(@PathVariable final String ids) {
+        final List<Integer> idList = new ArrayList<>();
+        final String[] split = ids.split(",");
+        for (String idStr : split) {
+            if (!isNumber(idStr)) {
+                throw new IllegalRequestBodyException();
+            }
+            idList.add(Integer.parseInt(idStr));
+        }
+        return inventoryService.check(idList);
+    }
+
+    private boolean isNumber(String value) {
+        try {
+            Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
 
 }

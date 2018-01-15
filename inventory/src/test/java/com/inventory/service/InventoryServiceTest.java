@@ -18,6 +18,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -111,10 +112,10 @@ public class InventoryServiceTest {
 
     @Test
     public void testCheck_validValue() throws Exception {
-        final Item item = sut.check(1);
-        assertThat(item.getId(), is(1));
-        assertThat(item.getName(), is("Hoge"));
-        assertThat(item.getCategory(), nullValue());
+        final List<Item> items = sut.check(Arrays.asList(1));
+        assertThat(items.get(0).getId(), is(1));
+        assertThat(items.get(0).getName(), is("Hoge"));
+        assertThat(items.get(0).getCategory(), nullValue());
     }
 
     @Test
