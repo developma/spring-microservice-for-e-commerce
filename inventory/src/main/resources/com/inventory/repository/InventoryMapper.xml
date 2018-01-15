@@ -60,7 +60,7 @@
         </if>
     </select>
 
-    <update id="reduce">
+    <update id="update">
         UPDATE ITEM
             SET UNIT = #{unit},
             VERSIONNO = #{versionno} + 1

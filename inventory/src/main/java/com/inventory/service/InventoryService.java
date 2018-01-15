@@ -2,7 +2,9 @@ package com.inventory.service;
 
 import com.inventory.domain.Item;
 import com.inventory.domain.ReduceInfo;
+import com.inventory.exception.InventoryItemUpdateException;
 import com.inventory.exception.InventoryLackingException;
+import com.inventory.exception.InventoryOptimisticException;
 import com.inventory.exception.ItemNotFoundException;
 import com.inventory.repository.InventoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,20 +41,27 @@ public class InventoryService {
     }
 
     @Transactional
-    public String reduce(final ReduceInfo reduceInfo) {
-        final Item item = inventoryMapper.selectItemById(reduceInfo.getId());
+    public String reduce(final List<Item> items) {
 
-        if (reduceInfo.getVersionno() != item.getVersionno()) {
-            throw new InventoryOptimisticException();
-        }
-
-        final Integer originalUnit = item.getUnit();
-        final Integer calcedUnit = originalUnit - reduceInfo.getUnit();
-        if (calcedUnit < 0) {
-            throw new InventoryLackingException();
-        }
-        reduceInfo.setUnit(calcedUnit);
-        final boolean result = inventoryMapper.reduce(reduceInfo);
+        items.forEach(item -> {
+            final Item selectedItem = inventoryMapper.selectItemById(item.getId());
+            if (item.getVersionno() != selectedItem.getVersionno()) {
+                throw new InventoryOptimisticException();
+            }
+            final Integer originalUnit = selectedItem.getUnit();
+            final Integer calcUnit = originalUnit - item.getUnit();
+            if (calcUnit < 0) {
+                throw new InventoryLackingException();
+            }
+            final ReduceInfo reduceInfo = new ReduceInfo();
+            reduceInfo.setId(item.getId());
+            reduceInfo.setVersionno(item.getVersionno());
+            reduceInfo.setUnit(calcUnit);
+            final boolean result = inventoryMapper.update(reduceInfo);
+            if (!result) {
+                throw new InventoryItemUpdateException();
+            }
+        });
         return "success";
     }
 

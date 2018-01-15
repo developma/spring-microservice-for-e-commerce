@@ -14,5 +14,5 @@ public interface InventoryMapper {
 
     Item selectItemById(@Param("id") final Integer id);
 
-    boolean reduce(ReduceInfo reduceInfo);
+    boolean update(final ReduceInfo reduceInfo);
 }

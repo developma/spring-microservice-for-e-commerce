@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inventory.InventoryApplication;
 import com.inventory.config.MyBatisConfig;
 import com.inventory.config.TestDataSource;
+import com.inventory.domain.Item;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,19 +19,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {TestDataSource.class, MyBatisConfig.class})
@@ -180,53 +177,17 @@ public class InventoryApplicationTests {
 //                .andDo(print());
 //    }
 
-
     @Test
     public void testReduce_validValue() throws Exception {
-        final Map<String, String> testParam = new HashMap<>();
-        testParam.put("id", "1");
-        testParam.put("unit", "5");
-        testParam.put("versionno", "0");
         final ObjectMapper objectMapper = new ObjectMapper();
-        final String json = objectMapper.writeValueAsString(testParam);
-        this.mockMvc.perform(post("/inventory/reduce/")
+        final String json = objectMapper.writeValueAsString(
+                Arrays.asList(new Item(1, "Hoge", 10000, 5, "desc", null, null, 0L))
+        );
+        this.mockMvc.perform(post("/inventory/update/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
                 .andExpect(content().string("success"))
-                .andDo(print());
-    }
-
-    @Test
-    public void testReduce_invalidValue_wrongvalue() throws Exception {
-        final Map<String, String> testParam = new HashMap<>();
-        testParam.put("id", "aaaa");
-        testParam.put("unit", "5");
-        final ObjectMapper objectMapper = new ObjectMapper();
-        final String json = objectMapper.writeValueAsString(testParam);
-        this.mockMvc.perform(post("/inventory/reduce/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.errorId", is("SVR_REQUEST_001")))
-                .andExpect(jsonPath("$.errorMessage", is("the data of request is not valid.")))
-                .andDo(print());
-    }
-
-    @Test
-    public void testReduce_invalidValue_null() throws Exception {
-        final Map<String, String> testParam = new HashMap<>();
-        testParam.put("unit", "5");
-        final ObjectMapper objectMapper = new ObjectMapper();
-        final String json = objectMapper.writeValueAsString(testParam);
-        this.mockMvc.perform(post("/inventory/reduce/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.errorId", is("SVR_REQUEST_001")))
-                .andExpect(jsonPath("$.errorMessage", is("the data of request is not valid.")))
                 .andDo(print());
     }
 

@@ -1,4 +1,4 @@
-package com.inventory.service;
+package com.inventory.exception;
 
 public class InventoryOptimisticException extends RuntimeException {
 

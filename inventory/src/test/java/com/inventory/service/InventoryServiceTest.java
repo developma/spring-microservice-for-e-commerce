@@ -4,6 +4,7 @@ import com.inventory.domain.Category;
 import com.inventory.domain.Item;
 import com.inventory.domain.ReduceInfo;
 import com.inventory.exception.InventoryLackingException;
+import com.inventory.exception.InventoryOptimisticException;
 import com.inventory.exception.ItemNotFoundException;
 import com.inventory.repository.InventoryMapper;
 import org.junit.Before;
@@ -40,6 +41,7 @@ public class InventoryServiceTest {
 
     @Before
     public void setUp() throws Exception {
+        when(inventoryMapper.update(new ReduceInfo(1, 5, 0L))).thenReturn(true);
         when(inventoryMapper.selectItemById(1)).thenReturn(new Item(1, "Hoge", 10000, 10, "desc", null, new Category(1, "Bar"), 0L));
         when(inventoryMapper.selectItemById(null)).thenReturn(null);
         when(inventoryMapper.selectItemsByCategoryId(1)).thenReturn(Arrays.asList(new Item(), new Item()));
@@ -82,7 +84,9 @@ public class InventoryServiceTest {
     public void testReduce_validValue() throws Exception {
         final Item item = sut.item(1);
         assertThat(item.getUnit(), is(10));
-        final String result = sut.reduce(new ReduceInfo(1, 5, 0L));
+        final String result = sut.reduce(Arrays.asList(
+                new Item(1, "test", 10000, 5, "desc", null, null, 0L)
+        ));
         assertThat(result, is("success"));
     }
 
@@ -91,14 +95,18 @@ public class InventoryServiceTest {
         expectedException.expect(InventoryLackingException.class);
         final Item item = sut.item(1);
         assertThat(item.getUnit(), is(10));
-        sut.reduce(new ReduceInfo(1, 30, 0L));
+        final String result = sut.reduce(Arrays.asList(
+                new Item(1, "test", 10000, 30, "desc", null, null, 0L)
+        ));
     }
 
     @Test
     public void testReduce_invalidBoundaryValue() throws Exception {
         final Item item = sut.item(1);
         assertThat(item.getUnit(), is(10));
-        sut.reduce(new ReduceInfo(1, 10, 0L));
+        final String result = sut.reduce(Arrays.asList(
+                new Item(1, "test", 10000, 10, "desc", null, null, 0L)
+        ));
     }
 
     @Test
@@ -113,6 +121,8 @@ public class InventoryServiceTest {
     public void testReduce_invalidVersionNo() throws Exception {
         expectedException.expect(InventoryOptimisticException.class);
         final Item item = sut.item(1);
-        sut.reduce(new ReduceInfo(1, 5, item.getVersionno() + 1));
+        final String result = sut.reduce(Arrays.asList(
+                new Item(1, "test", 10000, 5, "desc", null, null, 999L)
+        ));
     }
 }

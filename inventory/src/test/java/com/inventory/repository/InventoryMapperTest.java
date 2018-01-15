@@ -94,20 +94,20 @@ public class InventoryMapperTest {
     public void testUpdate_validValue() throws Exception {
         Item item = sut.selectItemById(1);
         assertThat(item.getUnit(), is(5));
-        boolean result = sut.reduce(new ReduceInfo(1, 3, 0L));
+        boolean result = sut.update(new ReduceInfo(1, 3, 0L));
         item = sut.selectItemById(1);
         assertThat(item.getUnit(), is(3));
         assertThat(result, is(true));
         assertThat(item.getVersionno(), is(1L));
 
-        result = sut.reduce(new ReduceInfo(1, 3, 0L));
+        result = sut.update(new ReduceInfo(1, 3, 0L));
         assertThat(result, is(false));
     }
 
     @Test
     public void testUpdate_invalidValue() throws Exception {
         final Item item = sut.selectItemById(1);
-        final boolean result = sut.reduce(new ReduceInfo(1, 3, item.getVersionno() + 1));
+        final boolean result = sut.update(new ReduceInfo(1, 3, item.getVersionno() + 1));
         assertThat(result, is(false));
     }
 }
