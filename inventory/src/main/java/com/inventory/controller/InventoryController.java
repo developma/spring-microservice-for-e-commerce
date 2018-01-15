@@ -43,8 +43,9 @@ public class InventoryController {
     public String reduce(@RequestBody final Map<String, String> params) {
         final String reqId = params.get("id");
         final String reqUnit = params.get("unit");
+        final String reqVersionNo = params.get("versionno");
 
-        if (reqId == null || reqUnit == null) {
+        if (reqId == null || reqUnit == null || reqVersionNo == null) {
             throw new IllegalRequestBodyException();
         }
 
@@ -54,7 +55,8 @@ public class InventoryController {
 
         final Integer id = Integer.valueOf(reqId);
         final Integer unit = Integer.valueOf(reqUnit);
-        return inventoryService.reduce(new ReduceInfo(id, unit));
+        final Long versionno = Long.valueOf(reqVersionNo);
+        return inventoryService.reduce(new ReduceInfo(id, unit, versionno));
     }
 
     @GetMapping("/check/{id}/")

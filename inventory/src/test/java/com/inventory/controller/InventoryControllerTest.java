@@ -40,12 +40,12 @@ public class InventoryControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        when(inventoryService.reduce(new ReduceInfo(1, 2))).thenReturn("success");
+        when(inventoryService.reduce(new ReduceInfo(1, 2, 0L))).thenReturn("success");
         when(inventoryService.item(null)).thenReturn(null);
-        when(inventoryService.item(1)).thenReturn(new Item(1, "Foo", 10000, 10, "Desc of Foo", null, new Category(1,"Bar")));
+        when(inventoryService.item(1)).thenReturn(new Item(1, "Foo", 10000, 10, "Desc of Foo", null, new Category(1,"Bar"), 0L));
         when(inventoryService.items()).thenReturn(Arrays.asList(new Item(), new Item(), new Item()));
         when(inventoryService.items(2)).thenReturn(Arrays.asList(new Item(), new Item()));
-        when(inventoryService.check(1)).thenReturn(new Item(1, "Foo", 10000, 10, null, null, null));
+        when(inventoryService.check(1)).thenReturn(new Item(1, "Foo", 10000, 10, null, null, null,  0L));
         when(inventoryService.check(999)).thenThrow(new ItemNotFoundException());
     }
 
@@ -82,6 +82,7 @@ public class InventoryControllerTest {
         final Map<String, String> params = new HashMap<>();
         params.put("id", "1");
         params.put("unit", "2");
+        params.put("versionno", "0");
         assertThat(sut.reduce(params), is("success"));
     }
 

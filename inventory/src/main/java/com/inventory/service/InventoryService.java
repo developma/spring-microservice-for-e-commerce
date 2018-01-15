@@ -41,13 +41,18 @@ public class InventoryService {
     @Transactional
     public String reduce(final ReduceInfo reduceInfo) {
         final Item item = inventoryMapper.selectItemById(reduceInfo.getId());
+
+        if (reduceInfo.getVersionno() != item.getVersionno()) {
+            throw new InventoryOptimisticException();
+        }
+
         final Integer originalUnit = item.getUnit();
         final Integer calcedUnit = originalUnit - reduceInfo.getUnit();
         if (calcedUnit < 0) {
             throw new InventoryLackingException();
         }
         reduceInfo.setUnit(calcedUnit);
-        inventoryMapper.reduce(reduceInfo);
+        final boolean result = inventoryMapper.reduce(reduceInfo);
         return "success";
     }
 

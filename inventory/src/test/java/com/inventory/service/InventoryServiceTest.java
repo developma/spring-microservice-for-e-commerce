@@ -40,7 +40,7 @@ public class InventoryServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        when(inventoryMapper.selectItemById(1)).thenReturn(new Item(1, "Hoge", 10000, 10, "desc", null, new Category(1, "Bar")));
+        when(inventoryMapper.selectItemById(1)).thenReturn(new Item(1, "Hoge", 10000, 10, "desc", null, new Category(1, "Bar"), 0L));
         when(inventoryMapper.selectItemById(null)).thenReturn(null);
         when(inventoryMapper.selectItemsByCategoryId(1)).thenReturn(Arrays.asList(new Item(), new Item()));
         when(inventoryMapper.selectItemsByCategoryId(null)).thenReturn(Arrays.asList(new Item(), new Item(), new Item(), new Item()));
@@ -82,7 +82,8 @@ public class InventoryServiceTest {
     public void testReduce_validValue() throws Exception {
         final Item item = sut.item(1);
         assertThat(item.getUnit(), is(10));
-        sut.reduce(new ReduceInfo(1, 5));
+        final String result = sut.reduce(new ReduceInfo(1, 5, 0L));
+        assertThat(result, is("success"));
     }
 
     @Test
@@ -90,14 +91,14 @@ public class InventoryServiceTest {
         expectedException.expect(InventoryLackingException.class);
         final Item item = sut.item(1);
         assertThat(item.getUnit(), is(10));
-        sut.reduce(new ReduceInfo(1, 30));
+        sut.reduce(new ReduceInfo(1, 30, 0L));
     }
 
     @Test
     public void testReduce_invalidBoundaryValue() throws Exception {
         final Item item = sut.item(1);
         assertThat(item.getUnit(), is(10));
-        sut.reduce(new ReduceInfo(1, 10));
+        sut.reduce(new ReduceInfo(1, 10, 0L));
     }
 
     @Test
@@ -106,5 +107,12 @@ public class InventoryServiceTest {
         assertThat(item.getId(), is(1));
         assertThat(item.getName(), is("Hoge"));
         assertThat(item.getCategory(), nullValue());
+    }
+
+    @Test
+    public void testReduce_invalidVersionNo() throws Exception {
+        expectedException.expect(InventoryOptimisticException.class);
+        final Item item = sut.item(1);
+        sut.reduce(new ReduceInfo(1, 5, item.getVersionno() + 1));
     }
 }

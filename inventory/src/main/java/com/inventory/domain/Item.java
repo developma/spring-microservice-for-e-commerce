@@ -26,4 +26,6 @@ public class Item {
 
     private Category category;
 
+    private Long versionno;
+
 }

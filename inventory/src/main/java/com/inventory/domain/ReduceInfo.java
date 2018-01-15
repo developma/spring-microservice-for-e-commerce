@@ -13,6 +13,8 @@ public class ReduceInfo {
 
     private Integer unit;
 
+    private Long versionno;
+
     @Override
     public boolean equals(Object obj) {
         // FIXME This code is ad-hoc code to pass the InventoryController#testReduce_validValue()

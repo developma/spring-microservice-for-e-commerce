@@ -100,7 +100,7 @@ public class InventoryApplicationTests {
     public void testItem_invalidValue() throws Exception {
         this.mockMvc.perform(get("/inventory/item/9999/")
                 .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.errorId", is("SVR_URI_010")))
                 .andExpect(jsonPath("$.errorMessage", is("could not find specified item in the inventory service.")))
@@ -186,6 +186,7 @@ public class InventoryApplicationTests {
         final Map<String, String> testParam = new HashMap<>();
         testParam.put("id", "1");
         testParam.put("unit", "5");
+        testParam.put("versionno", "0");
         final ObjectMapper objectMapper = new ObjectMapper();
         final String json = objectMapper.writeValueAsString(testParam);
         this.mockMvc.perform(post("/inventory/reduce/")
