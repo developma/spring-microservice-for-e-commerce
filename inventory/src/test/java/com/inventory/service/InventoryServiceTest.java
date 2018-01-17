@@ -112,10 +112,10 @@ public class InventoryServiceTest {
 
     @Test
     public void testCheck_validValue() throws Exception {
-        final List<Item> items = sut.check(Arrays.asList(1));
-        assertThat(items.get(0).getId(), is(1));
-        assertThat(items.get(0).getName(), is("Hoge"));
-        assertThat(items.get(0).getCategory(), nullValue());
+        final Item item = sut.check(1);
+        assertThat(item.getId(), is(1));
+        assertThat(item.getName(), is("Hoge"));
+        assertThat(item.getCategory(), nullValue());
     }
 
     @Test

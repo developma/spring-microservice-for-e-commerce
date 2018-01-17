@@ -15,7 +15,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -43,8 +42,8 @@ public class InventoryControllerTest {
         when(inventoryService.item(1)).thenReturn(new Item(1, "Foo", 10000, 10, "Desc of Foo", null, new Category(1,"Bar"), 0L));
         when(inventoryService.items()).thenReturn(Arrays.asList(new Item(), new Item(), new Item()));
         when(inventoryService.items(2)).thenReturn(Arrays.asList(new Item(), new Item()));
-        when(inventoryService.check(Arrays.asList(1, 2))).thenReturn(Arrays.asList(new Item(1, "Foo", 10000, 10, null, null, null,  0L)));
-        when(inventoryService.check(Arrays.asList(999))).thenThrow(new ItemNotFoundException());
+        when(inventoryService.check(1)).thenReturn(new Item(1, "Foo", 10000, 10, null, null, null,  0L));
+        when(inventoryService.check(999)).thenThrow(new ItemNotFoundException());
     }
 
     @Test
@@ -86,12 +85,12 @@ public class InventoryControllerTest {
 
     @Test
     public void testCheck_validValue() throws Exception {
-        final List<Item> items = sut.check("1,2");
-        assertThat(items.get(0).getId(), is(1));
-        assertThat(items.get(0).getName(), is("Foo"));
-        assertThat(items.get(0).getCategory(), nullValue());
-        assertThat(items.get(0).getDescription(), nullValue());
-        assertThat(items.get(0).getPict(), nullValue());
+        final Item item = sut.check("1");
+        assertThat(item.getId(), is(1));
+        assertThat(item.getName(), is("Foo"));
+        assertThat(item.getCategory(), nullValue());
+        assertThat(item.getDescription(), nullValue());
+        assertThat(item.getPict(), nullValue());
     }
 
     @Test

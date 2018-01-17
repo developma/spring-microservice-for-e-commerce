@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -66,16 +65,12 @@ public class InventoryService {
         return "success";
     }
 
-    public List<Item> check(final List<Integer> ids) {
-        final List<Item> items = new ArrayList<Item>();
-        ids.forEach(id -> {
-            final Item item = inventoryMapper.selectItemById(id);
-            if (item == null) {
-                throw new ItemNotFoundException();
-            }
-             items.add(wdightSaving(item));
-        });
-        return items;
+    public Item check(final Integer id) {
+        final Item item = inventoryMapper.selectItemById(id);
+        if (item == null) {
+            throw new ItemNotFoundException();
+        }
+        return wdightSaving(item);
     }
 
     private Item wdightSaving(Item item) {
