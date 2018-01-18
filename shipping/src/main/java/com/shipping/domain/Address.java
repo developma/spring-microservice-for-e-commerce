@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 public class Address {
 
     @NotNull
-    private Long id;
+    private Long registerId;
 
     @NotNull
     private String zipCode;

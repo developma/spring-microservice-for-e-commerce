@@ -8,9 +8,9 @@
     <insert id="insertOrderedItem" parameterType="com.shipping.domain.OrderedItem">
         INSERT
             INTO ORDEREDITEM
-                (ID, ITEM_ID, ITEM_UNIT)
+                (REGISTERID, ID, UNIT)
                 VALUES
-                (#{id}, #{itemId}, #{itemUnit})
+                (#{registerId}, #{id}, #{unit})
     </insert>
 
 </mapper>

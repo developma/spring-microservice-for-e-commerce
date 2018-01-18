@@ -15,7 +15,7 @@ import java.util.List;
 public class OrderInfo {
 
     @NotNull
-    private Long id;
+    private Long registerId;
 
     @NotNull
     @Valid

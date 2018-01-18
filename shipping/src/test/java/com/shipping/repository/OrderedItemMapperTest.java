@@ -37,11 +37,11 @@ public class OrderedItemMapperTest {
     @Test
     public void testInsert_valid() throws Exception {
         assertThat(jdbcTemplate.queryForList("SELECT * FROM ORDEREDITEM").size(), is(1));
-        final OrderedItem orderedItem = new OrderedItem(201712150999999L, 1, 5);
+        final OrderedItem orderedItem = new OrderedItem(201712150999999L, 1, 5, null);
         sut.insertOrderedItem(orderedItem);
         assertThat(jdbcTemplate.queryForList("SELECT * FROM ORDEREDITEM").size(), is(2));
 
-        final OrderedItem orderedItem1 = jdbcTemplate.queryForObject("SELECT * FROM ORDEREDITEM WHERE ID = 201712150999999", new BeanPropertyRowMapper<>(OrderedItem.class));
+        final OrderedItem orderedItem1 = jdbcTemplate.queryForObject("SELECT * FROM ORDEREDITEM WHERE REGISTERID = 201712150999999", new BeanPropertyRowMapper<>(OrderedItem.class));
         assertThat(orderedItem1, samePropertyValuesAs(orderedItem));
     }
 
@@ -49,7 +49,7 @@ public class OrderedItemMapperTest {
     public void testInsert_invalid() throws Exception {
         expectedException.expect(DuplicateKeyException.class);
         assertThat(jdbcTemplate.queryForList("SELECT * FROM ORDEREDITEM").size(), is(1));
-        final OrderedItem orderedItem = new OrderedItem(201712150999999L, 1, 5);
+        final OrderedItem orderedItem = new OrderedItem(201712150999999L, 1, 5, 0L);
         sut.insertOrderedItem(orderedItem);
         sut.insertOrderedItem(orderedItem);
     }

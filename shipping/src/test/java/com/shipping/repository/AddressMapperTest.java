@@ -41,7 +41,7 @@ public class AddressMapperTest {
         sut.insertAddress(address);
         assertThat(jdbcTemplate.queryForList("SELECT * FROM ADDR").size(), is(2));
 
-        final Address address1 = jdbcTemplate.queryForObject("SELECT * FROM ADDR WHERE ID = 1", new BeanPropertyRowMapper<Address>(Address.class));
+        final Address address1 = jdbcTemplate.queryForObject("SELECT * FROM ADDR WHERE REGISTERID = 1", new BeanPropertyRowMapper<Address>(Address.class));
         assertThat(address1, is(samePropertyValuesAs(address)));
     }
 

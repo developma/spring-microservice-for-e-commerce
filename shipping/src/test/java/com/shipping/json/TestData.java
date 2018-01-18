@@ -2,7 +2,9 @@ package com.shipping.json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shipping.domain.Address;
 import com.shipping.domain.OrderInfo;
+import com.shipping.domain.OrderedItem;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,43 +12,25 @@ import java.util.Map;
 
 public class TestData {
 
-    private static OrderInfo orderInfo_valid =
+    public static final OrderInfo orderInfo =
             new OrderInfo(
-                    Arrays.asList(new OrderInfo.Item(1, 10)),
-                    "testSender",
-                    "testReceiver",
-                    new OrderInfo.Address("123-4567", "locloclocloc"));
-
-    private static OrderInfo orderInfo_invalid_item =
+                    1L,
+                    Arrays.asList(new OrderedItem(1L, 1, 1, 0L)), "TestTestTest",
+                    new Address(1L, "123-4567", "TestLocTestLoc", "NameNameName")
+            );
+    public static final OrderInfo orderInfo_invalid =
             new OrderInfo(
-                    Arrays.asList(new OrderInfo.Item(0, -1)),
-                    "testSender",
-                    "testReceiver",
-                    new OrderInfo.Address("123-4567", "locloclocloc"));
-
-    private static OrderInfo orderInfo_invalid_sender_receiver =
-            new OrderInfo(
-                    Arrays.asList(new OrderInfo.Item(1, 10)),
-                    "",
-                    null,
-                    new OrderInfo.Address("123-4567", "locloclocloc"));
-
-    private static OrderInfo orderInfo_invalid_address =
-            new OrderInfo(
-                    Arrays.asList(new OrderInfo.Item(1, 10)),
-                    "testSender",
-                    "testReceiver",
-                    new OrderInfo.Address("abc123", null));
-
+                    1L,
+                    Arrays.asList(new OrderedItem(1L, 99, 1, 0L)), "TestTestTest",
+                    new Address(1L, "123-4567", "TestLocTestLoc", "NameNameName")
+            );
 
     public static Map<String, String> getTestData() throws JsonProcessingException {
-        return new HashMap<String ,String>() {
+        return new HashMap<String, String>() {
             {
                 final ObjectMapper objectMapper = new ObjectMapper();
-                put("orderInfo_valid", objectMapper.writeValueAsString(orderInfo_valid));
-                put("orderInfo_invalid_item", objectMapper.writeValueAsString(orderInfo_invalid_item));
-                put("orderInfo_invalid_sender_receiver", objectMapper.writeValueAsString(orderInfo_invalid_sender_receiver));
-                put("orderInfo_invalid_address", objectMapper.writeValueAsString(orderInfo_invalid_address));
+                put("ORDER_INFO_VALID", objectMapper.writeValueAsString(orderInfo));
+                put("ORDER_INFO_INVALID", objectMapper.writeValueAsString(orderInfo_invalid));
             }
         };
     }

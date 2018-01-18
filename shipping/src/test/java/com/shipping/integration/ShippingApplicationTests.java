@@ -1,5 +1,8 @@
 package com.shipping.integration;
 
+import com.shipping.ShippingApplication;
+import com.shipping.config.MyBatisConfig;
+import com.shipping.config.TestDataSource;
 import com.shipping.json.TestData;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,22 +10,25 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.print.attribute.standard.Media;
-
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = {TestDataSource.class, MyBatisConfig.class})
+@WebAppConfiguration
+@ContextConfiguration(classes = ShippingApplication.class)
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD,
+        scripts = {"classpath:drop.sql", "classpath:schema.sql", "classpath:data.sql"})
 public class ShippingApplicationTests {
 
     MockMvc mockMvc;
@@ -39,7 +45,7 @@ public class ShippingApplicationTests {
     public void testOrder_validValue() throws Exception {
         this.mockMvc.perform(post("/shipping/order/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestData.getTestData().get("orderInfo_valid").getBytes())
+                .content(TestData.getTestData().get("ORDER_INFO_VALID").getBytes())
                 .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
@@ -50,11 +56,11 @@ public class ShippingApplicationTests {
     public void testOrder_invalidValue_item() throws Exception {
         this.mockMvc.perform(post("/shipping/order/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(TestData.getTestData().get("orderInfo_valid").getBytes())
+                .content(TestData.getTestData().get("ORDER_INFO_INVALID").getBytes())
                 .accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errorId", is("SHIPPING_SVR_001")))
-                .andExpect(jsonPath("$.errorMessage", is("an invalid value was specified for posted json.")))
+                .andExpect(jsonPath("$.errorId", is("SHIPPING_SVR_002")))
+                .andExpect(jsonPath("$.errorMessage", is("could not find specified item in the inventory service.")))
                 .andDo(print());
     }
 }

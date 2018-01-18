@@ -5,11 +5,10 @@ import com.shipping.service.ShippingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
+@Validated
 @RequestMapping("/shipping")
 @RestController
 public class ShippingController {
@@ -21,8 +20,8 @@ public class ShippingController {
         this.shippingService = shippingService;
     }
 
-    @PostMapping(value = "/order/", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/order/")
     public String order(@Validated @RequestBody final OrderInfo orderInfo) {
-        return "success";
+        return shippingService.order(orderInfo);
     }
 }

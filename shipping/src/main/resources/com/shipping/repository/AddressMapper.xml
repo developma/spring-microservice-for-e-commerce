@@ -8,8 +8,8 @@
     <insert id="insertAddress" parameterType="com.shipping.domain.Address">
         INSERT
             INTO ADDR
-                (ID, ZIPCODE, LOCATION, RECEIVERNAME)
+                (REGISTERID, ZIPCODE, LOCATION, RECEIVERNAME)
                 VALUES
-                (#{id}, #{zipCode}, #{location}, #{receiverName})
+                (#{registerId}, #{zipCode}, #{location}, #{receiverName})
     </insert>
 </mapper>

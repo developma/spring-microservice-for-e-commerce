@@ -7,9 +7,9 @@
 
     <insert id="insertOrderHistory" parameterType="com.shipping.domain.OrderInfo">
         INSERT INTO ORDERHIST
-                    (ID, SENDERNAME, ORDEREDITEM_ID, ADDR_ID)
+                    (REGISTERID, SENDERNAME, ORDEREDITEM_ID, ADDR_ID)
                     VALUES
-                    (#{id}, #{senderName}, #{id}, #{id})
+                    (#{registerId}, #{senderName}, #{registerId}, #{registerId})
     </insert>
 
 </mapper>

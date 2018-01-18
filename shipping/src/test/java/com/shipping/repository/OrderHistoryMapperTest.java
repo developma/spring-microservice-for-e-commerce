@@ -38,8 +38,8 @@ public class OrderHistoryMapperTest {
     @Test
     public void testInsert_valid() throws Exception {
         final List<String> sqls = Arrays.asList(
-                "INSERT INTO ADDR (ID, ZIPCODE, LOCATION, RECEIVERNAME) VALUES (99, '123-4567', 'Tokyo-Fuchu', 'SCOTT');",
-                "INSERT INTO ORDEREDITEM (ID, ITEM_ID, ITEM_UNIT) VALUES (99, 1, 5);");
+                "INSERT INTO ADDR (REGISTERID, ZIPCODE, LOCATION, RECEIVERNAME) VALUES (99, '123-4567', 'Tokyo-Fuchu', 'SCOTT');",
+                "INSERT INTO ORDEREDITEM (REGISTERID, ID, UNIT) VALUES (99, 1, 5);");
 
         sqls.forEach(s -> jdbcTemplate.execute(s));
 
@@ -53,8 +53,8 @@ public class OrderHistoryMapperTest {
     public void testInsert_invalid() throws Exception {
         expectedException.expect(DuplicateKeyException.class);
         final List<String> sqls = Arrays.asList(
-                "INSERT INTO ADDR (ID, ZIPCODE, LOCATION, RECEIVERNAME) VALUES (99, '123-4567', 'Tokyo-Fuchu', 'SCOTT');",
-                "INSERT INTO ORDEREDITEM (ID, ITEM_ID, ITEM_UNIT) VALUES (99, 1, 5);");
+                "INSERT INTO ADDR (REGISTERID, ZIPCODE, LOCATION, RECEIVERNAME) VALUES (99, '123-4567', 'Tokyo-Fuchu', 'SCOTT');",
+                "INSERT INTO ORDEREDITEM (REGISTERID, ID, UNIT) VALUES (99, 1, 5);");
 
         sqls.forEach(s -> jdbcTemplate.execute(s));
 

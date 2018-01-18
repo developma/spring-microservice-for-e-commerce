@@ -13,13 +13,15 @@ import javax.validation.constraints.NotNull;
 public class OrderedItem {
 
     @NotNull
-    private Long id;
+    private Long registerId;
 
     @NotNull
     @Min(1)
-    private Integer itemId;
+    private Integer id;
 
     @NotNull
     @Min(1)
-    private Integer itemUnit;
+    private Integer unit;
+
+    private Long versionno;
 }
