@@ -8,6 +8,7 @@ import com.shipping.domain.OrderedItem;
 import com.shipping.exception.ItemNotFoundException;
 import com.shipping.exception.ItemUnitLackingException;
 import com.shipping.exception.NetworkException;
+import com.shipping.generator.RegisterIdGenerator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -31,8 +32,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
@@ -43,7 +43,9 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
         RestConfiguration.class,
         ShippingService.class,
         TestDataSource.class,
-        MyBatisConfig.class})
+        MyBatisConfig.class,
+        RegisterIdGenerator.class
+        })
 @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD,
         scripts = {"classpath:drop.sql", "classpath:schema.sql", "classpath:data.sql"})
 public class ShippingServiceTest {
@@ -92,11 +94,11 @@ public class ShippingServiceTest {
                 address);
         sut.order(orderInfo);
 
-        final Address address1 = jdbcTemplate.queryForObject("SELECT * FROM ADDR WHERE REGISTERID = 201701121606954", new BeanPropertyRowMapper<>(Address.class));
+        final Address address1 = jdbcTemplate.queryForObject("SELECT * FROM ADDR WHERE REGISTERID = " + orderInfo.getRegisterId(), new BeanPropertyRowMapper<>(Address.class));
         assertThat(address1, is(samePropertyValuesAs(address)));
 
-        final OrderedItem orderedItem1 = jdbcTemplate.queryForObject("SELECT * FROM ORDEREDITEM WHERE REGISTERID = 201701121606954", new BeanPropertyRowMapper<>(OrderedItem.class));
-        assertThat(orderedItem1.getRegisterId(), is(201701121606954L));
+        final OrderedItem orderedItem1 = jdbcTemplate.queryForObject("SELECT * FROM ORDEREDITEM WHERE REGISTERID = " + orderInfo.getRegisterId(), new BeanPropertyRowMapper<>(OrderedItem.class));
+        assertThat(orderedItem1.getRegisterId(), is(orderInfo.getRegisterId()));
         assertThat(orderedItem1.getId(), is(1));
         assertThat(orderedItem1.getUnit(), is(1));
 
@@ -148,8 +150,6 @@ public class ShippingServiceTest {
                 null);
         sut.order(orderInfo);
     }
-
-
 }
 
 @Configuration
