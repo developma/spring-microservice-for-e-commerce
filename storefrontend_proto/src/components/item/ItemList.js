@@ -17,7 +17,6 @@ export default class ItemList extends Component {
           window.alert('error')
         } else {
           const list = []
-          console.log(res.body.length)
           res.body.forEach((element) => {
             list.push(element)
           }

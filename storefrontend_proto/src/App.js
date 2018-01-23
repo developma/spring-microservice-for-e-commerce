@@ -6,9 +6,19 @@ import {ToastContainer, toast} from 'react-toastify'
 
 export default class App extends Component {
 
+  constructor (props) {
+    super(props)
+    this.state = {
+      item: null
+    }
+  }
+
   onAddToCartCallback (e) {
+    this.setState({
+      item: e
+    })
     // TODO Add codes to add clicked item to cart.
-    toast.success("An item has added to cart successfully.", {
+    toast.success("The " + e.name + " has added to cart successfully.", {
       position: toast.POSITION.TOP_CENTER
     })
   }
@@ -16,7 +26,7 @@ export default class App extends Component {
   render () {
     return (
       <div>
-        <Header />
+        <Header item={this.state.item}/>
         <ItemList onAddToCartCallback={e => this.onAddToCartCallback(e)}/>
         <Footer />
         <ToastContainer />

@@ -7,12 +7,20 @@ export default class Header extends Component {
       totalUnit: 0,
       totalFee: 0
     }
+    this.itemList = []
   }
 
-  onClickAddToCart (e) {
+  componentWillReceiveProps (nextProps) {
+    const item = nextProps.item
+    this.itemList.push(item)
+    let totalFee = 0
+    this.itemList.forEach(item => {
+      totalFee = totalFee + item.price
+    })
+
     this.setState({
-      totalUnit: 99,
-      totalFee: 100
+      totalUnit: this.itemList.length,
+      totalFee: totalFee
     })
   }
 

@@ -5,12 +5,15 @@ export default class Item extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      unit: this.props.unit
+      unit: this.props.unit,
+      id: this.props.id,
+      price: this.props.price,
+      name: this.props.name
     }
   }
 
   onAddToCartClick (e) {
-    this.props.onAddToCartCallback(e)
+    this.props.onAddToCartCallback(this.state)
   }
 
   render() {
